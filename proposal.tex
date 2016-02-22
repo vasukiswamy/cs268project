@@ -1,0 +1,47 @@
+\documentclass[11pt, draftclsnofoot, onecolumn]{IEEEtran}
+\usepackage{graphicx, wrapfig}
+\usepackage[noadjust]{cite}
+\usepackage{amssymb}
+\usepackage{amsmath,amssymb, mathabx}
+\usepackage{subcaption}
+\usepackage{fancyvrb, dsfont}
+\usepackage{hyperref}
+\usepackage{dsfont, multicol}
+\usepackage[all]{hypcap}
+\IEEEoverridecommandlockouts
+
+\begin{document}
+
+\title{CS268 Project Proposal - Synchronization of Clocks in Wireless Networks}
+
+\author{Vasuki~Narasimha~Swamy,
+	Jessica~Ko}
+
+\maketitle
+
+The ``Tactile Internet'' promises to introduce several new emerging technology market opportunities as well as new kinds of public services. Immersive and interactive applications such as robotics, gaming, virtual \& augmented reality, smart-healthcare, and smart grid all could involve precise human-to-machine and machine-to-machine interaction.
+The Internet of Things (IoT) also envisions a heterogeneous network where devices are connected seamlessly via the technology best suited for their particular needs.
+To enable these Tactile Internet and high-performance IoT applications, ultra-reliable communication with latencies of about 1ms is crucial.
+This domain is largely unexplored and the techniques used by existing standards are fundamentally ill suited for low-latency and high-reliability. %To facilitate futuristic applications, we must design new wireless architectures that strongly emphasize latency and reliability.
+
+An existing domain which parallels these requirements is high performance industrial control systems.
+As no existing wireless technology can support these requirements, wired communication protocols (Fieldbus) are used.
+They support short messages (10s of bytes) to/from closeby sensor/actuators (10s -100s) delivered regularly (100s - 1000s of times per second). The protocols are ultra-reliable (probability of a single packet delivery failure of $10^{-8}$) with very low latency (a couple of ms).
+Synchronized cooperative communication based wireless protocols proposed in \cite{swamy2015cooperative, swamy2016cooperative} achieves QoS (high-reliability and low latency) similar to wired fieldbus systems by exploiting multi-user diversity and distributed space-time coding to achieve.
+One of the main requirements for protocols aiming at high-performance IoT applications is tightly synchronized clocks. We aim to address this problem in our project.
+
+The goal of this project is development and analysis of protocols to achieve clock synchronization in a wireless network while tolerating a small (predefined) amount of error.
+We model the time at each node $n$ ($T_n$) to have two components: the time from the oscillator ($T_{n,o}$) and the correction time ($T_{n,c}$) such that $T_n = T_{n,o} + T_{n,c}$. We call $T_n$ to be the virtual clock time of node $n$. We want the virtual clock time differences between any two nodes $m$ and $n$ to be within a tolerable limit say $T_{\epsilon}$ i.e., $|T_m - T_n| \leq T_{\epsilon}$. The target $T_{\epsilon}$ is in the order of 100ns.
+
+We envision three ways of approaching this problem: a centralized (beacon oriented) solution,  a distributed solution, and a hierarchical solution.
+Each solution is well suited for different scenarios.
+For example, a centralized (and hierarchical) solution works better when most clocks are not synchronized. But when few nodes are not synchronized, a distributed or hierarchical synchronization would be more suitable.
+We will consider various jitter and drift models for clocks and address both the transient as well as steady state dynamics of the clocks.
+We will analyze these methods both theoretically as well as through simulations. We expect to have a few fundamental theorems under suitable assumptions and model based simulation results, for example number of rounds of communication it took for the network to reach equilibrium and how the network responded to different clock events (jitter vs drift). \textbf{If time permits}, we will try to build a protocol that piggybacks over WiFi.
+
+
+\bibliographystyle{IEEEtran}
+%{\small{
+\bibliography{IEEEabrv,cs268}%}
+
+\end{document}
