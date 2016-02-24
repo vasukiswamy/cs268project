@@ -15,12 +15,13 @@
 \title{CS268 Project Proposal - Synchronization of Clocks in Wireless Networks}
 
 \author{Vasuki~Narasimha~Swamy,
-	Jessica~Ko}
-
+	Jessica~Ko\\
+	\vspace{-45pt}}
 \maketitle
+\bstctlcite{BIBcontrol}
 
-The ``Tactile Internet'' promises to introduce several new emerging technology market opportunities as well as new kinds of public services. Immersive and interactive applications such as robotics, gaming, virtual \& augmented reality, smart-healthcare, and smart grid all could involve precise human-to-machine and machine-to-machine interaction.
-The Internet of Things (IoT) also envisions a heterogeneous network where devices are connected seamlessly via the technology best suited for their particular needs.
+The ``Tactile Internet'' promises to introduce several new emerging technology market opportunities as well as new kinds of public services. Immersive and interactive applications such as robotics, gaming, smart-healthcare, and smart grid all could involve precise H2M and M2M interaction.
+The Internet of Things (IoT) envisions a heterogeneous network where devices are connected seamlessly via the technology best suited for their needs.
 To enable these Tactile Internet and high-performance IoT applications, ultra-reliable communication with latencies of about 1ms is crucial.
 This domain is largely unexplored and the techniques used by existing standards are fundamentally ill suited for low-latency and high-reliability. %To facilitate futuristic applications, we must design new wireless architectures that strongly emphasize latency and reliability.
 
@@ -33,15 +34,22 @@ One of the main requirements for protocols aiming at high-performance IoT applic
 The goal of this project is development and analysis of protocols to achieve clock synchronization in a wireless network while tolerating a small (predefined) amount of error.
 We model the time at each node $n$ ($T_n$) to have two components: the time from the oscillator ($T_{n,o}$) and the correction time ($T_{n,c}$) such that $T_n = T_{n,o} + T_{n,c}$. We call $T_n$ to be the virtual clock time of node $n$. We want the virtual clock time differences between any two nodes $m$ and $n$ to be within a tolerable limit say $T_{\epsilon}$ i.e., $|T_m - T_n| \leq T_{\epsilon}$. The target $T_{\epsilon}$ is in the order of 100ns.
 
+
+There is no dearth of literature in this field.
+\cite{lundelius1984upper} takes a theoretic look at this problem under almost ideal conditions where the clocks start at a random time but are ticking at the same frequency. They introduce uncertainty in message delivery time which results in a fundamental achievable lower limit in how well synchronized the clocks can be.
+The seminal work ``Network Time Protocol''(NTP) \cite{mills1991internet} deals with synchronizing over a very large network (basically the internet) in a hierarchical fashion. The offsets achieved by this protocol is in the order of hundreds of milliseconds and is not fully suitable for control applications.
+\cite{elson2004global, elson2002fine} look at a reference broadcast based protocol which is a significatn improvement over NTP as the offsets are in the order of microseconds and also deal well with skews (difference of clock frequencies).
+Works like \cite{freris2010fundamentals, freris2007fundamental, giridhar2006distributed, freris2011fundamental} prove fundamental limits in clock synchronization along with stating that estimating all unknowns like clock offsets and link delays is impossible.
+
 We envision three ways of approaching this problem: a centralized (beacon oriented) solution,  a distributed solution, and a hierarchical solution.
 Each solution is well suited for different scenarios.
 For example, a centralized (and hierarchical) solution works better when most clocks are not synchronized. But when few nodes are not synchronized, a distributed or hierarchical synchronization would be more suitable.
 We will consider various jitter and drift models for clocks and address both the transient as well as steady state dynamics of the clocks.
-We will analyze these methods both theoretically as well as through simulations. We expect to have a few fundamental theorems under suitable assumptions and model based simulation results, for example number of rounds of communication it took for the network to reach equilibrium and how the network responded to different clock events (jitter vs drift). \textbf{If time permits}, we will try to build a protocol that piggybacks over WiFi.
-
-
+We will analyze these methods both theoretically as well as through simulations.
+We expect to have a few fundamental theorems under suitable assumptions and model based simulation results, for example number of rounds of communication it took for the network to reach equilibrium and how the network responded to different clock events (jitter vs drift).
+\textbf{If time permits}, we will try to build a protocol that piggybacks over WiFi.
 \bibliographystyle{IEEEtran}
-%{\small{
-\bibliography{IEEEabrv,cs268}%}
+
+\bibliography{IEEEabrv,cs268}
 
 \end{document}
