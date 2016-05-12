@@ -223,33 +223,78 @@ We performed some initial simulations with one reference clock and four clients.
 \caption{Results when  $t_0 = 1 \mu s$}
 \label{fig:results1_1mus}
 \end{subfigure}
+\caption{Simulated results for different synchronization time intervals}
 \label{fig:results1}
 \end{figure}
 
 For the clients, the skew is between $-300$ to $300$ ppm, which is an accurate representation of most clocks. The offset is picked randomly and the distance from the reference clock is picked randomly between $2$ to $10$ meters (this is fine as the applications being targeted are indoors and mostly in the line-of-sight of each other).
 The standard deviation of the noise that we used in our simulations was $100$ns. This is a good estimate of any movement or wrong estimate from mean position + radio delay. The distance covered by a radio signal in $100$ns is $30$m and any moving radio would typically cover than distance in $10$ seconds or so. Given we are considering applications in indoor environment, it is safe to assume that at most $1$ns (or $30$cm) error is contributed due to inaccuracy in distance measurement in every cycle lasting about $1$ms. In addition to that, $100$ns noise also takes into account any delay in measurement and decoding. If we had a $10$Ghz oscillator then $100$ns corresponds to almost $1000$ symbols of error which is roughly the maximum delay in a radio circuit to declare that a packet is being transmitted.
 
-When $t_0 = 1$ms as shown in Figure \ref{fig:results1_1ms}, the method performs extremely well because the difference between the estimate time and real time gets very close to zero within the first few time intervals.
+When $t_0 = 1$ms as shown in figure \ref{fig:results1_1ms}, the method performs extremely well because the difference between the estimate time and real time gets very close to zero within the first few time intervals.
 
-From Eq~\eqref{eq:main} it is plenty clear that considering the length of the time interval is necessary because the results are influenced by what value is picked. When a shorter time interval is used, the accuracy of the estimated time is worse as shown in Figure \ref{fig:results1_1mus} with $t_0 = 1 \mu s$. This is supported by Eq.~\eqref{eq:main} which states that the probability that we get too far from the true value of skew is an increasing function of $t_0$ so the simulation results agree with the theory.
+From Eq~\eqref{eq:main} it is plenty clear that considering the length of the time interval is necessary because the results are influenced by what value is picked. When a shorter time interval is used, the accuracy of the estimated time is worse as shown in figure \ref{fig:results1_1mus} with $t_0 = 1 \mu s$. This is supported by Eq.~\eqref{eq:main} which states that the probability that we get too far from the true value of skew is an increasing function of $t_0$ so the simulation results agree with the theory.
 If a longer time interval like $10$ms is used, the accuracy of the estimated time improves. When looking at time intervals greater than 70, figures \label{fig:results2_1ms} and \label{fig:results2_10ms} easily show the difference between accuracies. However, an accurate estimated time takes longer to reach because the time intervals are now longer.
 
 \begin{figure}
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
 \centering
 \includegraphics[scale=0.5]{figures/figure5}
 \caption{Results when $t_0 = 1$ms for time past 70ms}
 \label{fig:results2_1ms}
 \end{subfigure}~
-\begin{subfigure}[b]{0.45\textwidth}
+\begin{subfigure}[b]{0.48\textwidth}
 \centering
 \includegraphics[scale=0.5]{figures/figure6}
 \caption{Results when $t_0 = 10$ms for time past 70ms}
 \label{fig:results2_10ms}
 \end{subfigure}
+\caption{Closer look at the simulated results for different synchronization time intervals}
 \label{fig:results2}
 \end{figure}
 
+Does the `value' of the skew affect the performance of the synchronization method? To learn that, we performed another simulated experiment where the synchronization was allowed to run for $100$ seconds for all values of skews ranging from $\left(1 - 300\times 10^{-6}, 1 + 300 \times 10^{-6}\right)$ and we calculated the long term average error in the virtual clock and reference clock time. For the ideal clock model with constant skew and synchronization interval of $1$ms, the performance is depicted in figure~\ref{fig:ideal_1ms}.
+
+\begin{figure}[h]
+\begin{subfigure}[b]{0.48\textwidth}
+\centering
+\includegraphics[scale = 0.5]{figures/ideal_1ms}
+\caption{Performance of synchronization method for ideal clocks with synchronization interval of $1$ms}
+\label{fig:ideal_1ms}
+\end{subfigure}
+\begin{subfigure}[b]{0.48\textwidth}
+\includegraphics[scale = 0.5]{figures/real_1ms}
+\caption{Performance of synchronization method for real clocks with synchronization interval of $1$ms}
+\label{fig:real_1ms}
+\end{subfigure}
+\caption{Long term average for synchronization interval of $1$ms}
+\end{figure}
+
+As we see there is no discernible pattern which could make the performance dependent on the skew. But all the above performance results were for the ideal clock model. What happens to the performance of this method in the real clock model? We performed the same simulated experiment for the real clock model and observed the long term error average between the virtual clock and reference clock which is depicted in figure~\ref{fig:real_1ms}.
+
+\begin{figure}
+\centering
+
+\end{figure}
+
+We were initially surprised with this very positive result! Why is the performance of the synchronization method good enough even for real clocks? The answer lies in the amount of noise real clocks add. In section~\ref{sec:clock}, we presented a back of the envelope calculation which showed that for a $10$GHz oscillator with $50$ppm variance, the variance of error in time to register $1$ms is about $158$ps. And the variance noise we add for various delays is $100$ns which is about $1000$ times larger than the error due to skew variations. Due to the fact that variation in skew adds negligible noise compared to what is already being considered, the performance of the synchronization scheme is as good as the performance for ideal clocks.
+
+The idealism that we had to yet account for was dropping of packets which would result in clients not receiving the synchronization message. Wireless channels constantly vary. Coherence time is the time duration over which a channel's impulse response is considered to be not varying --- in other words, a good channel remains good for one coherence time period and a bad channel remains bad for one coherence time period. For indoor environments where we use say a $5$GHz spectrum for transmission and the clients are moving at a relative velocity of $10$m/s, the coherence time is between $15$ms and $30$ms (see \cite{Tse:2005:FWC:1111206} for coherence time calculation). We modeled the packet drop of a synchronization message (sent every $1$ms) using the coherence time of the indoor channels as if messages are received only once in every $30$ms. The performance of the synchronization method is shown in figure~\ref{fig:real_30ms}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale = 0.5]{figures/real_30ms}
+\caption{Performance of synchronization method for real clocks with synchronization interval of $30$ms}
+\label{fig:real_30ms}
+\end{figure}
+
+We see that again the performance is well within the target! Our next step was to add feedback from other clients but given that the performance is good, we decided to skip it. But this very positive performance got us wondering why we were outperforming most wireless sensor network synchronization techniques. The answer is due to three reasons:
+\begin{enumerate}
+\item Advancements in electronics has made cheap but good clocks and as we considered `good' clocks in our work (not atomic clocks but still good), we get good performance.
+\item The nodes are most of the time in talking range with each other as the applications being considered are indoors. The biggest factor is comes from the fact that we eliminate the `critical' path effect mentioned in \cite{elson2002fine} by actually minimizing it by considering an indoor environment.
+\item A huge difference between wireless sensor networks (WSN) and the applications we consider are energy requirements. Nodes in WSN cannot afford to stay up all the time and be in promiscuous listening mode but the applications we target can (and infact have to as shown in \cite{swamy2015cooperative}). This is a big contributor to this simple scheme having a good performance.
+\end{enumerate}
+
+This concludes our theoretical analyses of the synchronization protocols for high-performance IoT applications. The implementation of this scheme will be done on software defined radios over the summer and Fall semester!
 \bibliographystyle{IEEEtran}
 
 \bibliography{IEEEabrv,cs268}
